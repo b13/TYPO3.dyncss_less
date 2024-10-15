@@ -1,0 +1,19 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  KayStrobach\DyncssLess\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Parser/*'
+  KayStrobach\DyncssLess\Hooks\T3libPageRendererRenderPreProcessHook:
+    public: true
+  KayStrobach\DyncssLess\Service\DyncssService:
+    arguments:
+      $cache: '@cache.tx_dyncss'
+  cache.tx_dyncss:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['tx_dyncss']
