@@ -11,6 +11,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class DyncssService
@@ -112,7 +113,17 @@ class DyncssService
             if (substr($key, -1, 1) === '.') {
                 continue;
             }
-            $overrides[$key] = $contentObjectRenderer->cObjGetSingle($config, $configs[$key . '.'] ?? []);
+            if ($config === 'TEXT' && isset($configs[$key . '.']['value']) && str_contains($configs[$key . '.']['value'], 'typo3conf/ext/')) {
+                $extPath = 'EXT:' . preg_replace('/.*typo3conf\/ext\//', '', $configs[$key . '.']['value']);
+                try {
+                    $path = PathUtility::getPublicResourceWebPath($extPath);
+                    $overrides[$key] = '\'' . $path . '\'';
+                } catch (\Exception $e) {
+                    $overrides[$key] = $contentObjectRenderer->cObjGetSingle($config, $configs[$key . '.'] ?? []);
+                }
+            } else {
+                $overrides[$key] = $contentObjectRenderer->cObjGetSingle($config, $configs[$key . '.'] ?? []);
+            }
         }
         return $overrides;
     }
