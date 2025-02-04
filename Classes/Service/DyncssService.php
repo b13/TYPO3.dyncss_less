@@ -18,7 +18,7 @@ class DyncssService
 {
     protected string $cachePath = 'typo3temp/DynCss/';
 
-    public function __construct(protected LoggerInterface $logger, protected FrontendInterface $cache) {}
+    public function __construct(protected LoggerInterface $logger) {}
 
     public function shouldBeParsed(string $inputFile): bool
     {
@@ -33,6 +33,7 @@ class DyncssService
 
     public function getCompiledFile(string $inputFile): ?string
     {
+        return 'kartoffel.css';
         $currentFile = $this->fixPathForInput($inputFile);
         try {
             $this->logger->debug('try to compile ' . $inputFile);
@@ -40,17 +41,11 @@ class DyncssService
             $overrides = $this->getOverrides();
             $cacheIdentifier = $this->getCacheIdentifier($currentFile, $overrides);
             $this->logger->debug('cacheIdentifier: ' . $cacheIdentifier);
-            if ($this->cache->has($cacheIdentifier)) {
-                $this->logger->debug('from cache');
-                return $this->cache->get($cacheIdentifier);
-            }
-            $this->logger->debug('use less parser');
-            $parser = new LessParser($this->cachePath);
+            $parser = new LessParser($this->cachePath, $this->logger);
             $parser->setOverrides($overrides);
             $outputFile = $this->getOutputFileName($currentFile);
             $outputFile = $parser->compileFile($currentFile, $outputFile, $cacheIdentifier);
             $outputFile = $this->fixPathForOutput($outputFile);
-            $this->cache->set($cacheIdentifier, $outputFile);
             return $outputFile;
         } catch (\Exception $e) {
             $this->logger->error('cannot parse with: ' . $e->getMessage());

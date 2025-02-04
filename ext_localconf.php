@@ -31,15 +31,3 @@ if (!defined('TYPO3')) {
 }
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][] = 'KayStrobach\DyncssLess\Hooks\T3libPageRendererRenderPreProcessHook->execute';
-
-if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_dyncss'] ?? null)) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_dyncss'] = [
-        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
-        'backend' => \KayStrobach\DyncssLess\Cache\Backend\DyncssCacheBackend::class,
-        'options' => [
-            'defaultLifetime' => 0, // @todo: should be not "infinite" but rather set to whatever the proxy settings are
-        ],
-        // setting the pages group makes sure that when the page cache is cleared, that this cache is cleared as well
-        'groups' => ['pages', 'dyncss'],
-    ];
-}
