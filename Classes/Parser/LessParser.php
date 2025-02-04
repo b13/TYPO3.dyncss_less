@@ -2,6 +2,7 @@
 
 namespace KayStrobach\DyncssLess\Parser;
 
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -18,7 +19,7 @@ class LessParser
     protected string $inputFilename = '';
     protected string $outputFilename = '';
 
-    public function __construct(protected string $cachePath)
+    public function __construct(protected string $cachePath, protected LoggerInterface $logger)
     {
         if (!class_exists('Less_Cache')) {
             require_once(ExtensionManagementUtility::extPath('dyncss_less') . 'Resources/Private/Php/less.php/Autoloader.php');
@@ -139,8 +140,10 @@ class LessParser
 
         // exit if a precompiled version already exists
         if (file_exists($outputFilename)) {
+            $this->logger->debug('use cached file '. $outputFilename);
             return $outputFilename;
         }
+        $this->logger->debug('compile ' . $outputFilename);
 
         file_put_contents($preparedFilename, file_get_contents($inputFilename));
 
