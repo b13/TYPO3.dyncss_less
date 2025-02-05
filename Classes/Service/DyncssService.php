@@ -33,7 +33,6 @@ class DyncssService
 
     public function getCompiledFile(string $inputFile): ?string
     {
-        return 'kartoffel.css';
         $currentFile = $this->fixPathForInput($inputFile);
         try {
             $this->logger->debug('try to compile ' . $inputFile);
