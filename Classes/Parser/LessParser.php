@@ -140,7 +140,7 @@ class LessParser
 
         // exit if a precompiled version already exists
         if (file_exists($outputFilename)) {
-            $this->logger->debug('use cached file '. $outputFilename);
+            $this->logger->debug('use cached file ' . $outputFilename);
             return $outputFilename;
         }
         $this->logger->debug('compile ' . $outputFilename);
@@ -153,7 +153,7 @@ class LessParser
 
         if ($fileContent !== false) {
             file_put_contents($outputFilename, $fileContent);
-            \TYPO3\CMS\Core\Utility\GeneralUtility::fixPermissions($outputFilename);
+            GeneralUtility::fixPermissions($outputFilename);
             // important for some cache clearing scenarios
             if (file_exists($preparedFilename)) {
                 unlink($preparedFilename);

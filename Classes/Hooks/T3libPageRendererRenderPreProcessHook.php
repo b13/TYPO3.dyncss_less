@@ -38,7 +38,7 @@ class T3libPageRendererRenderPreProcessHook
 {
     public function __construct(protected DyncssService $dyncssService) {}
 
-    public function execute(array &$params, PageRenderer $pagerenderer)
+    public function execute(array &$params, PageRenderer $pagerenderer): void
     {
         if (!is_array($params['cssFiles'] ?? null)) {
             return;

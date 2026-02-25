@@ -6,7 +6,6 @@ namespace KayStrobach\DyncssLess\Service;
 
 use KayStrobach\DyncssLess\Parser\LessParser;
 use Psr\Log\LoggerInterface;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
