@@ -107,7 +107,8 @@ class DyncssService
                 continue;
             }
             if ($config === 'TEXT' && isset($configs[$key . '.']['value']) && str_contains($configs[$key . '.']['value'], 'typo3conf/ext/')) {
-                $extPath = 'EXT:' . preg_replace('/.*typo3conf\/ext\//', '', $configs[$key . '.']['value']);
+                $value = trim($configs[$key . '.']['value'], '\'');
+                $extPath = 'EXT:' . preg_replace('/.*typo3conf\/ext\//', '', $value);
                 try {
                     $path = PathUtility::getPublicResourceWebPath($extPath);
                     $overrides[$key] = '\'' . $path . '\'';
