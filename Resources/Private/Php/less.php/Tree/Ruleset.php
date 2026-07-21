@@ -240,7 +240,7 @@ class Less_Tree_Ruleset extends Less_Tree{
 
 	function evalImports($env) {
 
-		$rules_len = count($this->rules);
+		$rules_len = is_array($this->rules) ? count($this->rules) : 0;
 		for($i=0; $i < $rules_len; $i++){
 			$rule = $this->rules[$i];
 
